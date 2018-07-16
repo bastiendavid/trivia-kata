@@ -1,20 +1,25 @@
 package com.adaptionsoft.games.trivia.runner
 
 import com.adaptionsoft.games.uglytrivia.Game
+import com.adaptionsoft.games.uglytrivia.Logger
 import java.util.*
 
 object GameRunner {
     var notAWinner: Boolean = false
+    val logger = Logger()
 }
 
 fun main(args: Array<String>) {
-    val aGame = Game()
+    val aGame = Game(GameRunner.logger)
 
     aGame.add("Chet")
     aGame.add("Pat")
     aGame.add("Sue")
 
-    val rand = Random()
+    val rand = when (args.size) {
+        1 -> Random(args[0].toLong())
+        else -> Random()
+    }
 
     do {
 
