@@ -6,7 +6,6 @@ class Game(private val logger: Logger = Logger()) {
 
     var players = ArrayList<Player>()
     var places = IntArray(6)
-    var inPenaltyBox = BooleanArray(6)
 
     var popQuestions = LinkedList<String>()
     var scienceQuestions = LinkedList<String>()
@@ -52,7 +51,6 @@ class Game(private val logger: Logger = Logger()) {
     private fun add(player: Player): Boolean {
         players.add(player)
         places[howManyPlayers()] = 0
-        inPenaltyBox[howManyPlayers()] = false
 
         log(player.name + " was added")
         log("They are player number " + players.size)
@@ -67,7 +65,7 @@ class Game(private val logger: Logger = Logger()) {
         log(currentPlayer().name + " is the current player")
         log("They have rolled a " + roll)
 
-        if (inPenaltyBox[currentPlayer]) {
+        if (currentPlayer().isInPenaltyBox()) {
             if (roll % 2 != 0) {
                 isGettingOutOfPenaltyBox = true
 
@@ -124,7 +122,7 @@ class Game(private val logger: Logger = Logger()) {
     }
 
     fun wasCorrectlyAnswered(): Boolean {
-        if (inPenaltyBox[currentPlayer]) {
+        if (currentPlayer().isInPenaltyBox()) {
             if (isGettingOutOfPenaltyBox) {
                 log("Answer was correct!!!!")
                 currentPlayer().purse++
@@ -165,7 +163,7 @@ class Game(private val logger: Logger = Logger()) {
     fun wrongAnswer(): Boolean {
         log("Question was incorrectly answered")
         log(currentPlayer().name + " was sent to the penalty box")
-        inPenaltyBox[currentPlayer] = true
+        currentPlayer().goesToPenaltyBox()
 
         currentPlayer++
         if (currentPlayer == players.size) currentPlayer = 0
