@@ -2,16 +2,17 @@ package com.adaptionsoft.games.uglytrivia
 
 import java.util.*
 
-class Game(private val logger: Logger) {
-    var players = ArrayList<Any>()
+class Game(private val logger: Logger = Logger()) {
+
+    var players = ArrayList<Player>()
     var places = IntArray(6)
     var purses = IntArray(6)
     var inPenaltyBox = BooleanArray(6)
 
-    var popQuestions = LinkedList<Any>()
-    var scienceQuestions = LinkedList<Any>()
-    var sportsQuestions = LinkedList<Any>()
-    var rockQuestions = LinkedList<Any>()
+    var popQuestions = LinkedList<String>()
+    var scienceQuestions = LinkedList<String>()
+    var sportsQuestions = LinkedList<String>()
+    var rockQuestions = LinkedList<String>()
 
     var currentPlayer = 0
     var isGettingOutOfPenaltyBox: Boolean = false
@@ -21,27 +22,41 @@ class Game(private val logger: Logger) {
             popQuestions.addLast("Pop Question " + i)
             scienceQuestions.addLast("Science Question " + i)
             sportsQuestions.addLast("Sports Question " + i)
-            rockQuestions.addLast(createRockQuestion(i))
+            rockQuestions.addLast("Rock Question " + i)
         }
     }
 
-    fun createRockQuestion(index: Int): String {
-        return "Rock Question " + index
+    constructor(player1: Player, player2: Player, logger: Logger = Logger()) : this(logger) {
+        addPlayers(player1, player2)
     }
 
-    fun isPlayable(): Boolean {
-        return howManyPlayers() >= 2
+    constructor(player1: Player, player2: Player, player3: Player, logger: Logger = Logger()) : this(logger) {
+        addPlayers(player1, player2, player3)
     }
 
-    fun add(playerName: String): Boolean {
+    constructor(player1: Player, player2: Player, player3: Player, player4: Player, logger: Logger = Logger()) : this(logger) {
+        addPlayers(player1, player2, player3, player4)
+    }
 
+    constructor(player1: Player, player2: Player, player3: Player, player4: Player, player5: Player, logger: Logger = Logger()) : this(logger) {
+        addPlayers(player1, player2, player3, player4, player5)
+    }
 
-        players.add(playerName)
+    constructor(player1: Player, player2: Player, player3: Player, player4: Player, player5: Player, player6: Player, logger: Logger = Logger()) : this(logger) {
+        addPlayers(player1, player2, player3, player4, player5, player6)
+    }
+
+    private fun addPlayers(vararg players: Player) {
+        players.forEach { add(it) }
+    }
+
+    private fun add(player: Player): Boolean {
+        players.add(player)
         places[howManyPlayers()] = 0
         purses[howManyPlayers()] = 0
         inPenaltyBox[howManyPlayers()] = false
 
-        log(playerName + " was added")
+        log(player.name + " was added")
         log("They are player number " + players.size)
         return true
     }
@@ -51,24 +66,24 @@ class Game(private val logger: Logger) {
     }
 
     fun roll(roll: Int) {
-        log(players[currentPlayer].toString() + " is the current player")
+        log(players[currentPlayer].name + " is the current player")
         log("They have rolled a " + roll)
 
         if (inPenaltyBox[currentPlayer]) {
             if (roll % 2 != 0) {
                 isGettingOutOfPenaltyBox = true
 
-                log(players[currentPlayer].toString() + " is getting out of the penalty box")
+                log(players[currentPlayer].name + " is getting out of the penalty box")
                 places[currentPlayer] = places[currentPlayer] + roll
                 if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12
 
-                log(players[currentPlayer].toString()
+                log(players[currentPlayer].name
                         + "'s new location is "
                         + places[currentPlayer])
                 log("The category is " + currentCategory())
                 askQuestion()
             } else {
-                log(players[currentPlayer].toString() + " is not getting out of the penalty box")
+                log(players[currentPlayer].name + " is not getting out of the penalty box")
                 isGettingOutOfPenaltyBox = false
             }
 
@@ -77,7 +92,7 @@ class Game(private val logger: Logger) {
             places[currentPlayer] = places[currentPlayer] + roll
             if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12
 
-            log(players[currentPlayer].toString()
+            log(players[currentPlayer].name
                     + "'s new location is "
                     + places[currentPlayer])
             log("The category is " + currentCategory())
@@ -115,7 +130,7 @@ class Game(private val logger: Logger) {
             if (isGettingOutOfPenaltyBox) {
                 log("Answer was correct!!!!")
                 purses[currentPlayer]++
-                log(players[currentPlayer].toString()
+                log(players[currentPlayer].name
                         + " now has "
                         + purses[currentPlayer]
                         + " Gold Coins.")
@@ -136,7 +151,7 @@ class Game(private val logger: Logger) {
 
             log("Answer was corrent!!!!")
             purses[currentPlayer]++
-            log((players[currentPlayer].toString()
+            log((players[currentPlayer].name
                     + " now has "
                     + purses[currentPlayer]
                     + " Gold Coins."))
@@ -151,7 +166,7 @@ class Game(private val logger: Logger) {
 
     fun wrongAnswer(): Boolean {
         log("Question was incorrectly answered")
-        log(players[currentPlayer].toString() + " was sent to the penalty box")
+        log(players[currentPlayer].name + " was sent to the penalty box")
         inPenaltyBox[currentPlayer] = true
 
         currentPlayer++

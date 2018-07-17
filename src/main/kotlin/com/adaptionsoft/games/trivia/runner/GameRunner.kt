@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia.runner
 
 import com.adaptionsoft.games.uglytrivia.Game
 import com.adaptionsoft.games.uglytrivia.Logger
+import com.adaptionsoft.games.uglytrivia.Player
 import java.util.*
 
 object GameRunner {
@@ -10,11 +11,7 @@ object GameRunner {
 }
 
 fun main(args: Array<String>) {
-    val aGame = Game(GameRunner.logger)
-
-    aGame.add("Chet")
-    aGame.add("Pat")
-    aGame.add("Sue")
+    val aGame = Game(Player("Chet"), Player("Pat"), Player("Sue"), GameRunner.logger)
 
     val rand = when (args.size) {
         1 -> Random(args[0].toLong())
