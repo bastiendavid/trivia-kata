@@ -5,13 +5,13 @@ import java.util.*
 class Game(private val logger: Logger = Logger()) {
 
     var players = ArrayList<Player>()
+    var currentPlayerIndex = 0
 
     var popQuestions = LinkedList<String>()
     var scienceQuestions = LinkedList<String>()
     var sportsQuestions = LinkedList<String>()
     var rockQuestions = LinkedList<String>()
 
-    var currentPlayer = 0
     var isGettingOutOfPenaltyBox: Boolean = false
 
     init {
@@ -130,13 +130,11 @@ class Game(private val logger: Logger = Logger()) {
                         + " Gold Coins.")
 
                 val winner = didPlayerWin()
-                currentPlayer++
-                if (currentPlayer == players.size) currentPlayer = 0
+                nextPlayer()
 
                 return winner
             } else {
-                currentPlayer++
-                if (currentPlayer == players.size) currentPlayer = 0
+                nextPlayer()
                 return true
             }
 
@@ -151,8 +149,7 @@ class Game(private val logger: Logger = Logger()) {
                     + " Gold Coins."))
 
             val winner = didPlayerWin()
-            currentPlayer++
-            if (currentPlayer == players.size) currentPlayer = 0
+            nextPlayer()
 
             return winner
         }
@@ -163,9 +160,12 @@ class Game(private val logger: Logger = Logger()) {
         log(currentPlayer().name + " was sent to the penalty box")
         currentPlayer().goesToPenaltyBox()
 
-        currentPlayer++
-        if (currentPlayer == players.size) currentPlayer = 0
+        nextPlayer()
         return true
+    }
+
+    private fun nextPlayer() {
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size
     }
 
     private fun log(message: String) {
@@ -176,5 +176,5 @@ class Game(private val logger: Logger = Logger()) {
         return !currentPlayer().hasWon()
     }
 
-    private fun currentPlayer() = players[currentPlayer]
+    private fun currentPlayer() = players[currentPlayerIndex]
 }
