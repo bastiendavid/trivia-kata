@@ -5,7 +5,6 @@ import java.util.*
 class Game(private val logger: Logger = Logger()) {
 
     var players = ArrayList<Player>()
-    var places = IntArray(6)
 
     var popQuestions = LinkedList<String>()
     var scienceQuestions = LinkedList<String>()
@@ -50,7 +49,6 @@ class Game(private val logger: Logger = Logger()) {
 
     private fun add(player: Player): Boolean {
         players.add(player)
-        places[howManyPlayers()] = 0
 
         log(player.name + " was added")
         log("They are player number " + players.size)
@@ -70,12 +68,11 @@ class Game(private val logger: Logger = Logger()) {
                 isGettingOutOfPenaltyBox = true
 
                 log(currentPlayer().name + " is getting out of the penalty box")
-                places[currentPlayer] = places[currentPlayer] + roll
-                if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12
+                currentPlayer().moveForward(roll)
 
                 log(currentPlayer().name
                         + "'s new location is "
-                        + places[currentPlayer])
+                        + currentPlayerPlace())
                 log("The category is " + currentCategory())
                 askQuestion()
             } else {
@@ -85,12 +82,11 @@ class Game(private val logger: Logger = Logger()) {
 
         } else {
 
-            places[currentPlayer] = places[currentPlayer] + roll
-            if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12
+            currentPlayer().moveForward(roll)
 
             log(currentPlayer().name
                     + "'s new location is "
-                    + places[currentPlayer])
+                    + currentPlayerPlace())
             log("The category is " + currentCategory())
             askQuestion()
         }
@@ -109,17 +105,19 @@ class Game(private val logger: Logger = Logger()) {
     }
 
     private fun currentCategory(): String {
-        if (places[currentPlayer] == 0) return "Pop"
-        if (places[currentPlayer] == 4) return "Pop"
-        if (places[currentPlayer] == 8) return "Pop"
-        if (places[currentPlayer] == 1) return "Science"
-        if (places[currentPlayer] == 5) return "Science"
-        if (places[currentPlayer] == 9) return "Science"
-        if (places[currentPlayer] == 2) return "Sports"
-        if (places[currentPlayer] == 6) return "Sports"
-        if (places[currentPlayer] == 10) return "Sports"
+        if (currentPlayerPlace() == 0) return "Pop"
+        if (currentPlayerPlace() == 4) return "Pop"
+        if (currentPlayerPlace() == 8) return "Pop"
+        if (currentPlayerPlace() == 1) return "Science"
+        if (currentPlayerPlace() == 5) return "Science"
+        if (currentPlayerPlace() == 9) return "Science"
+        if (currentPlayerPlace() == 2) return "Sports"
+        if (currentPlayerPlace() == 6) return "Sports"
+        if (currentPlayerPlace() == 10) return "Sports"
         return "Rock"
     }
+
+    private fun currentPlayerPlace() = currentPlayer().place
 
     fun wasCorrectlyAnswered(): Boolean {
         if (currentPlayer().isInPenaltyBox()) {
