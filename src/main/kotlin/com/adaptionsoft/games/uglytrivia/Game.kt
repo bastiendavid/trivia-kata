@@ -54,13 +54,13 @@ class Game(private val logger: Logger = Logger()) {
         log("They are player number " + players.size)
         return true
     }
-    
+
     fun roll(roll: Int) {
         log(currentPlayer().name + " is the current player")
         log("They have rolled a " + roll)
 
         if (currentPlayer().isInPenaltyBox()) {
-            if (roll % 2 != 0) {
+            if (rolledAnOddNumber(roll)) {
                 isGettingOutOfPenaltyBox = true
 
                 log(currentPlayer().name + " is getting out of the penalty box")
@@ -88,6 +88,8 @@ class Game(private val logger: Logger = Logger()) {
         }
 
     }
+
+    private fun rolledAnOddNumber(roll: Int) = roll % 2 != 0
 
     private fun askQuestion() {
         if (currentCategory() === "Pop")
@@ -125,7 +127,7 @@ class Game(private val logger: Logger = Logger()) {
                         + currentPlayer().purse
                         + " Gold Coins.")
 
-                val winner = didPlayerWin()
+                val winner = gameContinues()
                 nextPlayer()
 
                 return winner
@@ -144,7 +146,7 @@ class Game(private val logger: Logger = Logger()) {
                     + currentPlayer().purse
                     + " Gold Coins."))
 
-            val winner = didPlayerWin()
+            val winner = gameContinues()
             nextPlayer()
 
             return winner
@@ -168,7 +170,7 @@ class Game(private val logger: Logger = Logger()) {
         logger.log(message)
     }
 
-    private fun didPlayerWin(): Boolean {
+    private fun gameContinues(): Boolean {
         return !currentPlayer().hasWon()
     }
 
