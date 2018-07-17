@@ -54,11 +54,7 @@ class Game(private val logger: Logger = Logger()) {
         log("They are player number " + players.size)
         return true
     }
-
-    fun howManyPlayers(): Int {
-        return players.size
-    }
-
+    
     fun roll(roll: Int) {
         log(currentPlayer().name + " is the current player")
         log("They have rolled a " + roll)
