@@ -6,7 +6,6 @@ class Game(private val logger: Logger = Logger()) {
 
     var players = ArrayList<Player>()
     var currentPlayerIndex = 0
-    var isGettingOutOfPenaltyBox: Boolean = false
     private val categories = arrayOf(Pop(), Science(), Sports(), Rock())
 
 
@@ -48,14 +47,14 @@ class Game(private val logger: Logger = Logger()) {
 
         if (currentPlayer().isInPenaltyBox()) {
             if (rolledAnOddNumber(roll)) {
-                isGettingOutOfPenaltyBox = true
+                currentPlayer().canAnswer = true
 
                 log(currentPlayer().name + " is getting out of the penalty box")
                 currentPlayerMoveForward(roll)
                 askQuestion()
             } else {
                 log(currentPlayer().name + " is not getting out of the penalty box")
-                isGettingOutOfPenaltyBox = false
+                currentPlayer().canAnswer = false
             }
 
         } else {
@@ -86,28 +85,16 @@ class Game(private val logger: Logger = Logger()) {
     private fun currentPlayerPlace() = currentPlayer().place
 
     fun wasCorrectlyAnswered(): Boolean {
-        if (currentPlayer().isInPenaltyBox()) {
-            if (isGettingOutOfPenaltyBox) {
-                currentPlayerScoresAPoint()
-
-                val winner = gameContinues()
-                nextPlayer()
-
-                return winner
-            } else {
-                nextPlayer()
-                return true
-            }
-
-
-        } else {
-
+        if (currentPlayer().canAnswer) {
             currentPlayerScoresAPoint()
 
             val winner = gameContinues()
             nextPlayer()
 
             return winner
+        } else {
+            nextPlayer()
+            return true
         }
     }
 

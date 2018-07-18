@@ -4,6 +4,7 @@ class Player(val name: String) {
     private var inPenaltyBox: Boolean = false
     var purse: Int = 0
     var place: Int = 0
+    var canAnswer: Boolean = true
 
     fun hasWon(): Boolean = purse == 6
 
@@ -18,5 +19,4 @@ class Player(val name: String) {
     fun moveForward(roll: Int) {
         place = (place + roll) % 12
     }
-
 }
