@@ -64,12 +64,7 @@ class Game(private val logger: Logger = Logger()) {
                 isGettingOutOfPenaltyBox = true
 
                 log(currentPlayer().name + " is getting out of the penalty box")
-                currentPlayer().moveForward(roll)
-
-                log(currentPlayer().name
-                        + "'s new location is "
-                        + currentPlayerPlace())
-                log("The category is " + currentCategory())
+                currentPlayerMoveForward(roll)
                 askQuestion()
             } else {
                 log(currentPlayer().name + " is not getting out of the penalty box")
@@ -78,15 +73,19 @@ class Game(private val logger: Logger = Logger()) {
 
         } else {
 
-            currentPlayer().moveForward(roll)
-
-            log(currentPlayer().name
-                    + "'s new location is "
-                    + currentPlayerPlace())
-            log("The category is " + currentCategory())
+            currentPlayerMoveForward(roll)
             askQuestion()
         }
 
+    }
+
+    private fun currentPlayerMoveForward(roll: Int) {
+        currentPlayer().moveForward(roll)
+
+        log(currentPlayer().name
+                + "'s new location is "
+                + currentPlayerPlace())
+        log("The category is " + currentCategory())
     }
 
     private fun rolledAnOddNumber(roll: Int) = roll % 2 != 0
@@ -120,12 +119,7 @@ class Game(private val logger: Logger = Logger()) {
     fun wasCorrectlyAnswered(): Boolean {
         if (currentPlayer().isInPenaltyBox()) {
             if (isGettingOutOfPenaltyBox) {
-                log("Answer was correct!!!!")
-                currentPlayer().purse++
-                log(currentPlayer().name
-                        + " now has "
-                        + currentPlayer().purse
-                        + " Gold Coins.")
+                currentPlayerScoresAPoint()
 
                 val winner = gameContinues()
                 nextPlayer()
@@ -139,18 +133,22 @@ class Game(private val logger: Logger = Logger()) {
 
         } else {
 
-            log("Answer was correct!!!!")
-            currentPlayer().purse++
-            log((currentPlayer().name
-                    + " now has "
-                    + currentPlayer().purse
-                    + " Gold Coins."))
+            currentPlayerScoresAPoint()
 
             val winner = gameContinues()
             nextPlayer()
 
             return winner
         }
+    }
+
+    private fun currentPlayerScoresAPoint() {
+        log("Answer was correct!!!!")
+        currentPlayer().purse++
+        log(currentPlayer().name
+                + " now has "
+                + currentPlayer().purse
+                + " Gold Coins.")
     }
 
     fun wrongAnswer(): Boolean {
