@@ -2,7 +2,7 @@ package com.adaptionsoft.games.uglytrivia
 
 class Player(val name: String) {
     private var inPenaltyBox: Boolean = false
-    var purse: Int = 0
+    private var purse: Int = 0
     var place: Int = 0
     var canAnswer: Boolean = true
 
@@ -19,4 +19,10 @@ class Player(val name: String) {
     fun moveForward(roll: Int) {
         place = (place + roll) % 12
     }
+
+    fun scoresAPoint() {
+        purse++
+    }
+
+    fun numberOfPoints(): Int = purse
 }

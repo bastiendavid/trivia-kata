@@ -100,10 +100,10 @@ class Game(private val logger: Logger = Logger()) {
 
     private fun currentPlayerScoresAPoint() {
         log("Answer was correct!!!!")
-        currentPlayer().purse++
+        currentPlayer().scoresAPoint()
         log(currentPlayer().name
                 + " now has "
-                + currentPlayer().purse
+                + currentPlayer().numberOfPoints()
                 + " Gold Coins.")
     }
 
