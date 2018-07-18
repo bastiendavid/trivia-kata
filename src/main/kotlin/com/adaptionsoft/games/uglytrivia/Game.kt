@@ -6,22 +6,9 @@ class Game(private val logger: Logger = Logger()) {
 
     var players = ArrayList<Player>()
     var currentPlayerIndex = 0
-
-    var popQuestions = LinkedList<String>()
-    var scienceQuestions = LinkedList<String>()
-    var sportsQuestions = LinkedList<String>()
-    var rockQuestions = LinkedList<String>()
-
     var isGettingOutOfPenaltyBox: Boolean = false
+    private val categories = arrayOf(Pop(), Science(), Sports(), Rock())
 
-    init {
-        for (i in 0..49) {
-            popQuestions.addLast("Pop Question " + i)
-            scienceQuestions.addLast("Science Question " + i)
-            sportsQuestions.addLast("Sports Question " + i)
-            rockQuestions.addLast("Rock Question " + i)
-        }
-    }
 
     constructor(player1: Player, player2: Player, logger: Logger = Logger()) : this(logger) {
         addPlayers(player1, player2)
@@ -85,34 +72,16 @@ class Game(private val logger: Logger = Logger()) {
         log(currentPlayer().name
                 + "'s new location is "
                 + currentPlayerPlace())
-        log("The category is " + currentCategory())
+        log("The category is " + currentCategory().name())
     }
 
     private fun rolledAnOddNumber(roll: Int) = roll % 2 != 0
 
     private fun askQuestion() {
-        if (currentCategory() === "Pop")
-            log(popQuestions.removeFirst())
-        if (currentCategory() === "Science")
-            log(scienceQuestions.removeFirst())
-        if (currentCategory() === "Sports")
-            log(sportsQuestions.removeFirst())
-        if (currentCategory() === "Rock")
-            log(rockQuestions.removeFirst())
+        log(currentCategory().question())
     }
 
-    private fun currentCategory(): String {
-        if (currentPlayerPlace() == 0) return "Pop"
-        if (currentPlayerPlace() == 4) return "Pop"
-        if (currentPlayerPlace() == 8) return "Pop"
-        if (currentPlayerPlace() == 1) return "Science"
-        if (currentPlayerPlace() == 5) return "Science"
-        if (currentPlayerPlace() == 9) return "Science"
-        if (currentPlayerPlace() == 2) return "Sports"
-        if (currentPlayerPlace() == 6) return "Sports"
-        if (currentPlayerPlace() == 10) return "Sports"
-        return "Rock"
-    }
+    private fun currentCategory(): Category = categories[currentPlayerPlace() % categories.size]
 
     private fun currentPlayerPlace() = currentPlayer().place
 
