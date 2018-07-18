@@ -1,11 +1,8 @@
 package com.adaptionsoft.games.uglytrivia
 
-import java.util.*
-
 class Game(private val logger: Logger = Logger()) {
 
-    var players = ArrayList<Player>()
-    var currentPlayerIndex = 0
+    var players = Players(logger)
     private val categories = arrayOf(Pop(), Science(), Sports(), Rock())
 
 
@@ -30,31 +27,23 @@ class Game(private val logger: Logger = Logger()) {
     }
 
     private fun addPlayers(vararg players: Player) {
-        players.forEach { add(it) }
-    }
-
-    private fun add(player: Player): Boolean {
-        players.add(player)
-
-        log(player.name + " was added")
-        log("They are player number " + players.size)
-        return true
+        players.forEach { this.players.add(it) }
     }
 
     fun roll(roll: Int) {
-        log(currentPlayer().name + " is the current player")
+        log(players.current().name + " is the current player")
         log("They have rolled a " + roll)
 
-        if (currentPlayer().isInPenaltyBox()) {
+        if (players.current().isInPenaltyBox()) {
             if (rolledAnOddNumber(roll)) {
-                currentPlayer().canAnswer = true
+                players.current().canAnswer = true
 
-                log(currentPlayer().name + " is getting out of the penalty box")
+                log(players.current().name + " is getting out of the penalty box")
                 currentPlayerMoveForward(roll)
                 askQuestion()
             } else {
-                log(currentPlayer().name + " is not getting out of the penalty box")
-                currentPlayer().canAnswer = false
+                log(players.current().name + " is not getting out of the penalty box")
+                players.current().canAnswer = false
             }
 
         } else {
@@ -66,9 +55,9 @@ class Game(private val logger: Logger = Logger()) {
     }
 
     private fun currentPlayerMoveForward(roll: Int) {
-        currentPlayer().moveForward(roll)
+        players.current().moveForward(roll)
 
-        log(currentPlayer().name
+        log(players.current().name
                 + "'s new location is "
                 + currentPlayerPlace())
         log("The category is " + currentCategory().name())
@@ -82,42 +71,38 @@ class Game(private val logger: Logger = Logger()) {
 
     private fun currentCategory(): Category = categories[currentPlayerPlace() % categories.size]
 
-    private fun currentPlayerPlace() = currentPlayer().place
+    private fun currentPlayerPlace() = players.current().place
 
     fun wasCorrectlyAnswered(): Boolean {
-        if (currentPlayer().canAnswer) {
+        if (players.current().canAnswer) {
             currentPlayerScoresAPoint()
 
             val winner = gameContinues()
-            nextPlayer()
+            players.next()
 
             return winner
         } else {
-            nextPlayer()
+            players.next()
             return true
         }
     }
 
     private fun currentPlayerScoresAPoint() {
         log("Answer was correct!!!!")
-        currentPlayer().scoresAPoint()
-        log(currentPlayer().name
+        players.current().scoresAPoint()
+        log(players.current().name
                 + " now has "
-                + currentPlayer().numberOfPoints()
+                + players.current().numberOfPoints()
                 + " Gold Coins.")
     }
 
     fun wrongAnswer(): Boolean {
         log("Question was incorrectly answered")
-        log(currentPlayer().name + " was sent to the penalty box")
-        currentPlayer().goesToPenaltyBox()
+        log(players.current().name + " was sent to the penalty box")
+        players.current().goesToPenaltyBox()
 
-        nextPlayer()
+        players.next()
         return true
-    }
-
-    private fun nextPlayer() {
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.size
     }
 
     private fun log(message: String) {
@@ -125,8 +110,7 @@ class Game(private val logger: Logger = Logger()) {
     }
 
     private fun gameContinues(): Boolean {
-        return !currentPlayer().hasWon()
+        return !players.current().hasWon()
     }
 
-    private fun currentPlayer() = players[currentPlayerIndex]
 }
