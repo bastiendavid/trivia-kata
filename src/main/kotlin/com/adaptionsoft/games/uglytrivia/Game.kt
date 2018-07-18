@@ -139,7 +139,7 @@ class Game(private val logger: Logger = Logger()) {
 
         } else {
 
-            log("Answer was corrent!!!!")
+            log("Answer was correct!!!!")
             currentPlayer().purse++
             log((currentPlayer().name
                     + " now has "
