@@ -39,7 +39,7 @@ class Game {
                 players.current().canAnswer = true
 
                 log(players.current().name + " is getting out of the penalty box")
-                currentPlayerMoveForward(roll)
+                currentPlayerMoveOnBoard(roll)
                 askQuestion()
             } else {
                 log(players.current().name + " is not getting out of the penalty box")
@@ -48,24 +48,19 @@ class Game {
 
         } else {
 
-            currentPlayerMoveForward(roll)
+            currentPlayerMoveOnBoard(roll)
             askQuestion()
         }
-
     }
 
-    private fun currentPlayerMoveForward(roll: Int) {
-        players.current().moveForward(roll)
-
-        log(players.current().name
-                + "'s new location is "
-                + currentPlayerPlace())
-        log("The category is " + currentCategory().name())
+    private fun currentPlayerMoveOnBoard(roll: Int) {
+        players.current().moveOnBoard(roll)
     }
 
     private fun rolledAnOddNumber(roll: Int) = roll % 2 != 0
 
     private fun askQuestion() {
+        log("The category is " + currentCategory().name())
         log(currentCategory().question())
     }
 

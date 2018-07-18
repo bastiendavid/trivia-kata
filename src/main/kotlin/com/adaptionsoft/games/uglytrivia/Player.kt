@@ -16,8 +16,10 @@ class Player(val name: String) {
         inPenaltyBox = true
     }
 
-    fun moveForward(roll: Int) {
+    fun moveOnBoard(roll: Int) {
         place = (place + roll) % 12
+        Logger.get().log("$name's new location is $place")
+
     }
 
     fun scoresAPoint() {
