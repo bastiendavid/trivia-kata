@@ -69,33 +69,14 @@ class Game {
     private fun currentPlayerPlace() = players.current().place
 
     fun wasCorrectlyAnswered(): Boolean {
-        if (players.current().canAnswer) {
-            currentPlayerScoresAPoint()
-
-            val winner = gameContinues()
-            players.next()
-
-            return winner
-        } else {
-            players.next()
-            return true
-        }
-    }
-
-    private fun currentPlayerScoresAPoint() {
-        log("Answer was correct!!!!")
-        players.current().scoresAPoint()
-        log(players.current().name
-                + " now has "
-                + players.current().numberOfPoints()
-                + " Gold Coins.")
+        players.current().gaveAGoodAnswer()
+        val gameContinues = gameContinues()
+        players.next()
+        return gameContinues
     }
 
     fun wrongAnswer(): Boolean {
-        log("Question was incorrectly answered")
-        log(players.current().name + " was sent to the penalty box")
-        players.current().goesToPenaltyBox()
-
+        players.current().gaveAWrongAnswer()
         players.next()
         return true
     }

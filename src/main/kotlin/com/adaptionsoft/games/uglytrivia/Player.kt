@@ -24,7 +24,20 @@ class Player(val name: String) {
 
     fun scoresAPoint() {
         purse++
+        Logger.get().log("$name now has $purse Gold Coins.")
+
     }
 
-    fun numberOfPoints(): Int = purse
+    fun gaveAGoodAnswer() {
+        if (canAnswer) {
+            Logger.get().log("Answer was correct!!!!")
+            scoresAPoint()
+        }
+    }
+
+    fun gaveAWrongAnswer() {
+        Logger.get().log("Question was incorrectly answered")
+        Logger.get().log("$name was sent to the penalty box")
+        goesToPenaltyBox()
+    }
 }
