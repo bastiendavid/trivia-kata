@@ -1,28 +1,28 @@
 package com.adaptionsoft.games.uglytrivia
 
-class Game(private val logger: Logger = Logger()) {
+class Game {
 
-    var players = Players(logger)
+    var players = Players()
     private val categories = arrayOf(Pop(), Science(), Sports(), Rock())
 
 
-    constructor(player1: Player, player2: Player, logger: Logger = Logger()) : this(logger) {
+    constructor(player1: Player, player2: Player) {
         addPlayers(player1, player2)
     }
 
-    constructor(player1: Player, player2: Player, player3: Player, logger: Logger = Logger()) : this(logger) {
+    constructor(player1: Player, player2: Player, player3: Player) {
         addPlayers(player1, player2, player3)
     }
 
-    constructor(player1: Player, player2: Player, player3: Player, player4: Player, logger: Logger = Logger()) : this(logger) {
+    constructor(player1: Player, player2: Player, player3: Player, player4: Player) {
         addPlayers(player1, player2, player3, player4)
     }
 
-    constructor(player1: Player, player2: Player, player3: Player, player4: Player, player5: Player, logger: Logger = Logger()) : this(logger) {
+    constructor(player1: Player, player2: Player, player3: Player, player4: Player, player5: Player) {
         addPlayers(player1, player2, player3, player4, player5)
     }
 
-    constructor(player1: Player, player2: Player, player3: Player, player4: Player, player5: Player, player6: Player, logger: Logger = Logger()) : this(logger) {
+    constructor(player1: Player, player2: Player, player3: Player, player4: Player, player5: Player, player6: Player) {
         addPlayers(player1, player2, player3, player4, player5, player6)
     }
 
@@ -106,7 +106,7 @@ class Game(private val logger: Logger = Logger()) {
     }
 
     private fun log(message: String) {
-        logger.log(message)
+        Logger.get().log(message)
     }
 
     private fun gameContinues(): Boolean {

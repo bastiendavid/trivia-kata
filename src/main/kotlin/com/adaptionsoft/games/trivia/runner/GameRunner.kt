@@ -7,11 +7,10 @@ import java.util.*
 
 object GameRunner {
     var notAWinner: Boolean = false
-    val logger = Logger()
 }
 
 fun main(args: Array<String>) {
-    val aGame = Game(Player("Chet"), Player("Pat"), Player("Sue"), GameRunner.logger)
+    val aGame = Game(Player("Chet"), Player("Pat"), Player("Sue"))
 
     val rand = when (args.size) {
         1 -> Random(args[0].toLong())

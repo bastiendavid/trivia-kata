@@ -1,7 +1,17 @@
 package com.adaptionsoft.games.uglytrivia
 
-open class Logger {
+class Logger private constructor() {
+
+    companion object {
+        @JvmStatic
+        private val logger: Logger = Logger()
+
+        @JvmStatic
+        fun get(): Logger = logger
+    }
+
     val logs = ArrayList<String>()
+
     fun log(message: String) {
         println(message)
         logs.add(message)
