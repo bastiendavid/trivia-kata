@@ -42,23 +42,25 @@ class Player(val name: String) {
         log("They have rolled a $roll")
 
         if (inPenaltyBox) {
-            when (rollIsOdd(roll)) {
-                true -> {
-                    canAnswer = true
-                    log("$name is getting out of the penalty box")
-                    moveOnBoard(roll)
-                    game.askQuestion()
-                }
-                false -> {
-                    log("$name is not getting out of the penalty box")
-                    canAnswer = false
-                }
+            val rollAllowsToLeavePenaltyBox = rollIsOdd(roll)
+            when (rollAllowsToLeavePenaltyBox) {
+                true -> leavesPenaltyBox()
+                false -> staysInPenaltyBox()
             }
-            return
-        } else {
-            moveOnBoard(roll)
-            game.askQuestion()
+            if (!rollAllowsToLeavePenaltyBox) return
         }
+        moveOnBoard(roll)
+        game.askQuestion()
+    }
+
+    private fun staysInPenaltyBox() {
+        log("$name is not getting out of the penalty box")
+        canAnswer = false
+    }
+
+    private fun leavesPenaltyBox() {
+        canAnswer = true
+        log("$name is getting out of the penalty box")
     }
 
     private fun rollIsOdd(roll: Int): Boolean = roll % 2 != 0
