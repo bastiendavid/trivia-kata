@@ -18,26 +18,35 @@ class Player(val name: String) {
 
     fun moveOnBoard(roll: Int) {
         place = (place + roll) % 12
-        Logger.get().log("$name's new location is $place")
+        log("$name's new location is $place")
 
     }
 
     fun scoresAPoint() {
         purse++
-        Logger.get().log("$name now has $purse Gold Coins.")
+        log("$name now has $purse Gold Coins.")
 
     }
 
     fun gaveAGoodAnswer() {
         if (canAnswer) {
-            Logger.get().log("Answer was correct!!!!")
+            log("Answer was correct!!!!")
             scoresAPoint()
         }
     }
 
     fun gaveAWrongAnswer() {
-        Logger.get().log("Question was incorrectly answered")
-        Logger.get().log("$name was sent to the penalty box")
+        log("Question was incorrectly answered")
+        log("$name was sent to the penalty box")
         goesToPenaltyBox()
+    }
+
+    fun rolls(roll: Int) {
+        log("$name is the current player")
+        log("They have rolled a $roll")
+    }
+
+    private fun log(message: String) {
+        Logger.get().log(message)
     }
 }

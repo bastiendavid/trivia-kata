@@ -1,5 +1,9 @@
 package com.adaptionsoft.games.uglytrivia
 
+enum class Number {
+    ODD, EVEN
+}
+
 class Game {
 
     var players = Players()
@@ -31,21 +35,22 @@ class Game {
     }
 
     fun roll(roll: Int) {
-        log(players.current().name + " is the current player")
-        log("They have rolled a " + roll)
+        players.current().rolls(roll)
 
         if (players.current().isInPenaltyBox()) {
-            if (rolledAnOddNumber(roll)) {
-                players.current().canAnswer = true
-
-                log(players.current().name + " is getting out of the penalty box")
-                currentPlayerMoveOnBoard(roll)
-                askQuestion()
-            } else {
-                log(players.current().name + " is not getting out of the penalty box")
-                players.current().canAnswer = false
+            when (rollIsOdd(roll)) {
+                true -> {
+                    players.current().canAnswer = true
+                    log(players.current().name + " is getting out of the penalty box")
+                    currentPlayerMoveOnBoard(roll)
+                    askQuestion()
+                }
+                false -> {
+                    log(players.current().name + " is not getting out of the penalty box")
+                    players.current().canAnswer = false
+                }
             }
-
+            return
         } else {
 
             currentPlayerMoveOnBoard(roll)
@@ -57,7 +62,7 @@ class Game {
         players.current().moveOnBoard(roll)
     }
 
-    private fun rolledAnOddNumber(roll: Int) = roll % 2 != 0
+    private fun rollIsOdd(roll: Int): Boolean = roll % 2 != 0
 
     private fun askQuestion() {
         log("The category is " + currentCategory().name())
