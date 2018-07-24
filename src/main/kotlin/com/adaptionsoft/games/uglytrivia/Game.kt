@@ -5,36 +5,10 @@ class Game(private val players: Players) {
     private val categories = arrayOf(Pop(), Science(), Sports(), Rock())
 
     fun roll(roll: Int) {
-        players.current().rolls(roll)
-
-        if (players.current().isInPenaltyBox()) {
-            when (rollIsOdd(roll)) {
-                true -> {
-                    players.current().canAnswer = true
-                    log(players.current().name + " is getting out of the penalty box")
-                    currentPlayerMoveOnBoard(roll)
-                    askQuestion()
-                }
-                false -> {
-                    log(players.current().name + " is not getting out of the penalty box")
-                    players.current().canAnswer = false
-                }
-            }
-            return
-        } else {
-
-            currentPlayerMoveOnBoard(roll)
-            askQuestion()
-        }
+        players.current().rolls(this, roll)
     }
 
-    private fun currentPlayerMoveOnBoard(roll: Int) {
-        players.current().moveOnBoard(roll)
-    }
-
-    private fun rollIsOdd(roll: Int): Boolean = roll % 2 != 0
-
-    private fun askQuestion() {
+    fun askQuestion() {
         log("The category is " + currentCategory().name())
         log(currentCategory().question())
     }

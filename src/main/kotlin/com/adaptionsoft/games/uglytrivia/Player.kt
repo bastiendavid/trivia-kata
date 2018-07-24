@@ -8,10 +8,6 @@ class Player(val name: String) {
 
     fun hasWon(): Boolean = purse == 6
 
-    fun isInPenaltyBox(): Boolean {
-        return inPenaltyBox
-    }
-
     fun goesToPenaltyBox() {
         inPenaltyBox = true
     }
@@ -41,10 +37,31 @@ class Player(val name: String) {
         goesToPenaltyBox()
     }
 
-    fun rolls(roll: Int) {
+    fun rolls(game: Game, roll: Int) {
         log("$name is the current player")
         log("They have rolled a $roll")
+
+        if (inPenaltyBox) {
+            when (rollIsOdd(roll)) {
+                true -> {
+                    canAnswer = true
+                    log("$name is getting out of the penalty box")
+                    moveOnBoard(roll)
+                    game.askQuestion()
+                }
+                false -> {
+                    log("$name is not getting out of the penalty box")
+                    canAnswer = false
+                }
+            }
+            return
+        } else {
+            moveOnBoard(roll)
+            game.askQuestion()
+        }
     }
+
+    private fun rollIsOdd(roll: Int): Boolean = roll % 2 != 0
 
     private fun log(message: String) {
         Logger.get().log(message)
