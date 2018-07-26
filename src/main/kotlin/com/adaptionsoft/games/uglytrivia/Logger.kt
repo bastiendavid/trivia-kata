@@ -20,4 +20,8 @@ class Logger private constructor() {
     fun logsAsString(): String {
         return logs.reduce { acc, s -> "$acc\n$s" }
     }
+
+    fun clear() {
+        logs.clear()
+    }
 }
