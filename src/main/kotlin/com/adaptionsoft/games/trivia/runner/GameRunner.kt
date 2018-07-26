@@ -11,7 +11,7 @@ object GameRunner {
 }
 
 fun main(args: Array<String>) {
-    val aGame = Game(Players(Player("Chet"), Player("Pat"), Player("Sue")))
+    val aGame = Game("Chet", "Pat", "Sue")
 
     val rand = when (args.size) {
         1 -> Random(args[0].toLong())

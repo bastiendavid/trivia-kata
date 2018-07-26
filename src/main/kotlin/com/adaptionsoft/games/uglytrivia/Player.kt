@@ -1,6 +1,6 @@
 package com.adaptionsoft.games.uglytrivia
 
-class Player(val name: String) {
+class Player(val name: String, private val game: Game) {
     private var inPenaltyBox: Boolean = false
     private var purse: Int = 0
     var place: Int = 0
@@ -9,15 +9,13 @@ class Player(val name: String) {
     fun hasWon(): Boolean = purse == 6
 
     fun moveOnBoard(roll: Int) {
-        place = (place + roll) % 12
+        place = (place + roll) % game.boardSize()
         log("$name's new location is $place")
-
     }
 
     fun scoresAPoint() {
         purse++
         log("$name now has $purse Gold Coins.")
-
     }
 
     fun gaveAGoodAnswer() {
@@ -35,7 +33,7 @@ class Player(val name: String) {
     }
 
 
-    fun rolls(game: Game, roll: Int) {
+    fun rolls(roll: Int) {
         log("$name is the current player")
         log("They have rolled a $roll")
 
