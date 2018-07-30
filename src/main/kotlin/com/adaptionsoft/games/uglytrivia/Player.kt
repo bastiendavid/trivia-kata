@@ -37,13 +37,21 @@ class Player(val name: String, private val game: Game) {
         log("$name is the current player")
         log("They have rolled a $roll")
 
-        if (inPenaltyBox) {
-            canAttemptToLeavePenaltyBox = rollIsOdd(roll)
-            if (!canAttemptToLeavePenaltyBox) {
-                staysInPenaltyBox()
-                return
-            }
+        when (inPenaltyBox) {
+            true -> attemptsToLeavePenaltyBox(roll)
+            else -> plays(roll)
         }
+    }
+
+    private fun attemptsToLeavePenaltyBox(roll: Int) {
+        canAttemptToLeavePenaltyBox = rollIsOdd(roll)
+        when (canAttemptToLeavePenaltyBox) {
+            true -> plays(roll)
+            else -> staysInPenaltyBox()
+        }
+    }
+
+    private fun plays(roll: Int) {
         moveOnBoard(roll)
         game.askQuestion()
     }
