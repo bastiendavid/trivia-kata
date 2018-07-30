@@ -6,29 +6,30 @@ import com.adaptionsoft.games.uglytrivia.Player
 import com.adaptionsoft.games.uglytrivia.Players
 import java.util.*
 
-object GameRunner {
-    var notAWinner: Boolean = false
-}
-
 fun main(args: Array<String>) {
     val aGame = Game("Chet", "Pat", "Sue")
 
-    val rand = when (args.size) {
+    val rand = random(args)
+
+    do {
+        aGame.roll(diceRoll(rand))
+
+        if (playerFailsToAnswer(rand)) {
+            aGame.wrongAnswer()
+        } else {
+            aGame.wasCorrectlyAnswered()
+        }
+    } while (!aGame.isOver())
+
+}
+
+private fun playerFailsToAnswer(rand: Random) = rand.nextInt(9) == 7
+
+private fun diceRoll(rand: Random) = rand.nextInt(5) + 1
+
+private fun random(args: Array<String>): Random {
+    return when (args.size) {
         1 -> Random(args[0].toLong())
         else -> Random()
     }
-
-    do {
-
-        aGame.roll(rand.nextInt(5) + 1)
-
-        if (rand.nextInt(9) == 7) {
-            GameRunner.notAWinner = aGame.wrongAnswer()
-        } else {
-            GameRunner.notAWinner = aGame.wasCorrectlyAnswered()
-        }
-
-
-    } while (GameRunner.notAWinner)
-
 }

@@ -21,4 +21,8 @@ class Players(private val game: Game) {
 
     fun current(): Player = players[currentPlayerIndex]
 
+    fun hasAWinner(): Boolean {
+        return players.map { it.hasWon() }.reduce { acc, b -> acc || b }
+    }
+
 }
