@@ -3,6 +3,7 @@ package com.adaptionsoft.games.uglytrivia
 class Game {
 
     var players: Players = Players(this)
+    var categories: Categories = Categories()
 
     constructor(player1: String, player2: String) {
         players.join(player1, player2)
@@ -24,8 +25,6 @@ class Game {
         players.join(player1, player2, player3, player4, player5, player6)
     }
 
-    private val categories = arrayOf(Pop(), Science(), Sports(), Rock())
-
     fun roll(roll: Int) {
         currentPlayer().rolls(roll)
     }
@@ -45,13 +44,13 @@ class Game {
         players.next()
     }
 
-    private fun currentCategory(): Category = categories[currentPlayerPlace() % categories.size]
+    private fun currentCategory(): Category = categories.at(currentPlayerPlace())
 
     private fun currentPlayer() = players.current()
 
     private fun currentPlayerPlace() = currentPlayer().place
 
-    fun boardSize(): Int = categories.size * 3
+    fun boardSize(): Int = categories.count() * 3
 
     fun isOver(): Boolean = players.hasAWinner()
 
