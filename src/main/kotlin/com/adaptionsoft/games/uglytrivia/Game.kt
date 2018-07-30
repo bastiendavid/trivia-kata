@@ -1,7 +1,5 @@
 package com.adaptionsoft.games.uglytrivia
 
-import com.sun.org.apache.xpath.internal.operations.Bool
-
 class Game {
 
     var players: Players = Players(this)
@@ -37,10 +35,6 @@ class Game {
         log(currentCategory().question())
     }
 
-    private fun currentCategory(): Category = categories[currentPlayerPlace() % categories.size]
-
-    private fun currentPlayerPlace() = currentPlayer().place
-
     fun wasCorrectlyAnswered() {
         currentPlayer().gaveAGoodAnswer()
         players.next()
@@ -51,13 +45,17 @@ class Game {
         players.next()
     }
 
+    private fun currentCategory(): Category = categories[currentPlayerPlace() % categories.size]
+
     private fun currentPlayer() = players.current()
 
-    private fun log(message: String) {
-        Logger.get().log(message)
-    }
+    private fun currentPlayerPlace() = currentPlayer().place
 
     fun boardSize(): Int = categories.size * 3
 
     fun isOver(): Boolean = players.hasAWinner()
+
+    private fun log(message: String) {
+        Logger.get().log(message)
+    }
 }

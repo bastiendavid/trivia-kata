@@ -8,31 +8,6 @@ class Player(val name: String, private val game: Game) {
 
     fun hasWon(): Boolean = purse == 6
 
-    fun moveOnBoard(roll: Int) {
-        place = (place + roll) % game.boardSize()
-        log("$name's new location is $place")
-    }
-
-    fun scoresAPoint() {
-        purse++
-        log("$name now has $purse Gold Coins.")
-    }
-
-    fun gaveAGoodAnswer() {
-        if (inPenaltyBox && !canAttemptToLeavePenaltyBox) {
-            return
-        }
-        log("Answer was correct!!!!")
-        scoresAPoint()
-        leavesPenaltyBox()
-    }
-
-    fun gaveAWrongAnswer() {
-        log("Question was incorrectly answered")
-        goesToPenaltyBox()
-    }
-
-
     fun rolls(roll: Int) {
         log("$name is the current player")
         log("They have rolled a $roll")
@@ -43,6 +18,17 @@ class Player(val name: String, private val game: Game) {
         }
     }
 
+
+    private fun plays(roll: Int) {
+        moveOnBoard(roll)
+        game.askQuestion()
+    }
+
+    private fun moveOnBoard(roll: Int) {
+        place = (place + roll) % game.boardSize()
+        log("$name's new location is $place")
+    }
+
     private fun attemptsToLeavePenaltyBox(roll: Int) {
         canAttemptToLeavePenaltyBox = rollIsOdd(roll)
         when (canAttemptToLeavePenaltyBox) {
@@ -51,9 +37,25 @@ class Player(val name: String, private val game: Game) {
         }
     }
 
-    private fun plays(roll: Int) {
-        moveOnBoard(roll)
-        game.askQuestion()
+    private fun rollIsOdd(roll: Int): Boolean = roll % 2 != 0
+
+    fun gaveAGoodAnswer() {
+        if (inPenaltyBox && !canAttemptToLeavePenaltyBox) {
+            return
+        }
+        log("Answer was correct!!!!")
+        scoresAPoint()
+        leavesPenaltyBox()
+    }
+
+    private fun scoresAPoint() {
+        purse++
+        log("$name now has $purse Gold Coins.")
+    }
+
+    fun gaveAWrongAnswer() {
+        log("Question was incorrectly answered")
+        goesToPenaltyBox()
     }
 
     private fun staysInPenaltyBox() {
@@ -69,8 +71,6 @@ class Player(val name: String, private val game: Game) {
         log("$name was sent to the penalty box")
         inPenaltyBox = true
     }
-
-    private fun rollIsOdd(roll: Int): Boolean = roll % 2 != 0
 
     private fun log(message: String) {
         Logger.get().log(message)
